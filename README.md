@@ -11,17 +11,17 @@
 ```bash
  > vagrant up
  > vagrant ssh
-```bash 
+```
 4. Pour arrêter vagrant (optionnel)
 ```bash
  > vagrant halt
-```bash
+```
 
 5. Pour supprimer la VM d'abord chercher l'instance et ensuite utiliser l'option destroy
 ```bash
 > vagrant global-status --prune
 > vagrant destroy xxxxx
-```bash
+```
 
 
 ## Installation Ansible
@@ -34,7 +34,7 @@ sudo apt update
 sudo apt install software-properties-common
 sudo apt-add-repository --yes --update ppa:ansible/ansible
 sudo apt install ansible
-```bash
+```
 
 
 ## Installation de Docker
@@ -51,6 +51,6 @@ sudo systemctl status docker
 
 sudo docker help
 
-```bash
+```
 
 
