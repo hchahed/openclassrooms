@@ -1,15 +1,88 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-ENV['VAGRANT_DEFAULT_PROVIDER'] = 'virtualbox'
-
+# All Vagrant configuration is done below. The "2" in Vagrant.configure
+# configures the configuration version (we support older styles for
+# backwards compatibility). Please don't change it unless you know what
+# you're doing.
 Vagrant.configure("2") do |config|
-  ##### DEFINE VM #####
-  config.vm.define "ubuntu-01" do |config|
-  config.vm.hostname = "ubuntu-01"
-  config.vm.box = "ubuntu/bionic64"
-  config.vm.box_check_update = false
-  #config.vm.forwarded_port 80, 8080
-  config.vm.network "public_network", bridge:"Intel(R) Dual Band Wireless-AC 8265"
-  end
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagraèntcloud.com/search.
+  config.vm.box = "ubuntu/focal64"
+  # config.vm.box_version = "1905.1"
+  config.vm.hostname="ubuntu-ans-node1"
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
+
+  
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine. In the example below,
+  # accessing "localhost:8080" will access port 80 on the guest machine.
+  # A
+  # B
+  # NOTE: This will enable public access to the opened port
+  # config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine and only allow access
+  # via 127.0.0.1 to disable public access
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network "private_network", ip: "192.168.33.10"
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+   config.vm.network "public_network"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # A
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  # Provider-specific configuration so you can fine-tune various
+  # backing providers for Vagrant. These expose provider-specific options.
+  # Example for VirtualBox:
+  #
+   config.vm.provider "virtualbox" do |vb|
+  #   # Display the VirtualBox GUI when booting the machine
+  #   vb.gui = true
+  #
+  #   # Customize the amount of memory on the VM:
+     vb.memory = "4028"
+   end
+  #A
+  #
+  # View the documentation for the provider you are using for more
+  # information on available options.
+
+   # B
+  # Enable provisioning with a shell script. Additional provisioners such as
+  # Ansible, Chef, Docker, Puppet and Salt are also available. Please see the
+  # documentation for more information about their specific syntax and use.
+ config.vm.disk :disk, size: "15GB", primary: true 
+ config.vm.provision "shell", inline: <<-SHELL
+          sudo apt install apt-transport-https ca-certificates curl software-properties-common
+          curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+          sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+          sudo apt update
+          apt-cache policy docker-ce
+          sudo apt install -y docker-ce
+          sudo usermod -aG docker ${USER}
+          sudo apt install -y software-properties-common
+          sudo apt-add-repository --yes --update ppa:ansible/ansible
+          
+          sudo apt install -y ansible 
+ SHELL
 end
